@@ -10,6 +10,23 @@ example.com -> 172.16.0.1:53
 
 v6にも対応しているほか、複数のサーバーを登録することで、クエリに失敗した際に別な鯖へ問い合わせ可能です。
 
+## インストール方法
+
+Ubuntu
+```shell
+sudo mkdir -p /srv/dns_forwarder
+sudo curl -L -o /srv/dns_forwarder/dns_forwarder "https://github.com/shiro8613/dns_forwarder/releases/latest/download/dns_forwarder_linux_$([[ "$(uname -m)" == "x86_64" ]] && echo "amd64" || echo "arm64")"
+sudo chmod u+x /srv/dns_forwarder/dns_forwarder
+sudo curl -L -o /etc/systemd/system/dns_forwarder.service https://raw.githubusercontent.com/shiro8613/dns_forwarder/main/dns_forwarder.service
+sudo curl -L -o /srv/dns_forwarder/config.yml https://raw.githubusercontent.com/shiro8613/dns_forwarder/main/config.example.yml
+```
+
+起動
+```
+sudo systemctl enable --now dns_forwarder
+sudo systemctl start dns_forwarder
+```
+
 ### コンフィグファイルについて
 
 コンフィグファイルは`config.example.yml`を参照して書いていただきたいのですが、補足があるため記述します。
