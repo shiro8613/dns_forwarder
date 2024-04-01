@@ -1,0 +1,54 @@
+name: Release
+
+on:
+  push:
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.0"
+
+      - name: Build release binaries
+        env:
+          CGO_ENABLED: 0
+          REF: ${{ github.ref }}
+        run: |
+          GOARCH=amd64 go build -o dist/dns_forwarder_linux_amd64 -ldflags="-s -w"
+          chmod 755 dist/dns_forwarder_linux_amd64
+          GOARCH=arm64 go build -o dist/dns_forwarder_linux_arm64 -ldflags="-s -w"
+          chmod 755 dist/dns_forwarder_linux_arm64
+
+      - name: Create release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload amd64 binary
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/dns_forwarder_linux_amd64
+          asset_name: dns_forwarder_linux_amd64
+          asset_content_type: application/octet-stream
+
+      - name: Upload arm64 binary
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/dns_forwarder_linux_arm64
+          asset_name: dns_forwarder_linux_arm64
+          asset_content_type: application/octet-stream
