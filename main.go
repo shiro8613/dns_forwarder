@@ -25,7 +25,7 @@ func main() {
 	wg.Add(1)
 	go func() {
 		logger.Info(fmt.Sprintf("(v4)Listen on %s", conf.Bind4))
-		logger.Panic(dns.ListenAndServe(conf.Bind4, "udp", proxy.Handler("v4")))
+		logger.Panic(dns.ListenAndServe(conf.Bind4, "udp4", proxy.Handler("v4")))
 		wg.Done()
 	}()
 
@@ -33,7 +33,7 @@ func main() {
 		wg.Add(1)
 		go func() {
 			logger.Info(fmt.Sprintf("(v6)Listen on %s", conf.Bind6))
-			logger.Panic(dns.ListenAndServe(conf.Bind6, "udp", proxy.Handler("v6")))
+			logger.Panic(dns.ListenAndServe(conf.Bind6, "udp6", proxy.Handler("v6")))
 			wg.Done()
 		}()
 	}
