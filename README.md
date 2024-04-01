@@ -15,7 +15,7 @@ v6にも対応しているほか、複数のサーバーを登録することで
 Ubuntu
 ```shell
 sudo mkdir -p /srv/dns_forwarder
-curl -L -o /srv/dns_forwarder/dns_forwarder "https://github.com/shiro8613/dns_forwarder/releases/latest/download/dns_forwarder_linux_$([[ "$(uname -m)" == "x86_64" ]] && echo "amd64" || echo "arm64")"
+sudo curl -L -o /srv/dns_forwarder/dns_forwarder "https://github.com/shiro8613/dns_forwarder/releases/latest/download/dns_forwarder_linux_$([[ "$(uname -m)" == "x86_64" ]] && echo "amd64" || echo "arm64")"
 sudo chmod u+x /srv/dns_forwarder/dns_forwarder
 sudo curl -L -o /etc/systemd/system/dns_forwarder.service https://raw.githubusercontent.com/shiro8613/dns_forwarder/main/dns_forwarder.service
 sudo curl -L -o /srv/dns_forwarder/config.yml https://raw.githubusercontent.com/shiro8613/dns_forwarder/main/config.example.yml
