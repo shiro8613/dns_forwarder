@@ -1,0 +1,15 @@
+[Unit]
+Description=dns_forwarder service
+
+[Service]
+User=root
+WorkingDirectory=/usr/share/dns_forwarder
+LimitNOFILE=4096
+ExecStart=/usr/share/dns_forwarder/dns_forwarder
+Restart=on-failure
+StartLimitInterval=180
+StartLimitBurst=30
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
