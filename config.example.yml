@@ -1,0 +1,13 @@
+bind4: "127.0.0.1:53"
+bind6: "[::1]:53"
+cache_time: 30
+forwards:
+  - 1.1.1.1
+  - 8.8.8.8
+  - 2404:6800:4004:822::200e
+
+servers:
+  example.com:
+    to: 172.16.0.1:53
+    priority: 1
+    
