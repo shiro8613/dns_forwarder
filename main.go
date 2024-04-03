@@ -21,6 +21,11 @@ func init() {
 func main() {
 	conf := config.GetConfig()
 
+	err := cache.SetAutoRemove()
+	if err != nil {
+		logger.Panic(err)
+	}
+
 	wg := sync.WaitGroup{}
 	wg.Add(1)
 	go func() {

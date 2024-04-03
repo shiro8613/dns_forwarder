@@ -2,7 +2,9 @@ package cache
 
 import (
 	"dns_forwarder/config"
+	"fmt"
 	"github.com/miekg/dns"
+	"github.com/robfig/cron/v3"
 	"sync"
 	"time"
 )
@@ -23,6 +25,29 @@ func Init() {
 	c = Cache{
 		m: make(map[string]Value),
 	}
+}
+
+func SetAutoRemove() error {
+	t := config.GetConfig().CacheTime * 10
+	cr := cron.New()
+	_, err := cr.AddFunc(fmt.Sprintf("@every %ds", t), autoRemoveFunc)
+	if err != nil {
+		return err
+	}
+
+	cr.Start()
+
+	return nil
+}
+
+func autoRemoveFunc() {
+	c.mu.Lock()
+	for k, m := range c.m {
+		if time.Now().After(time.UnixMilli(m.Time)) {
+			delete(c.m, k)
+		}
+	}
+	c.mu.Unlock()
 }
 
 func Is(name string) bool {
