@@ -109,7 +109,9 @@ func forward(w dns.ResponseWriter, m *dns.Msg, fList []string) error {
 			return err
 		} else {
 			for ii, ss := range r.Answer {
-				cache.Set(r.Question[ii].Name, ss)
+				if len(r.Question) > ii {
+					cache.Set(r.Question[ii].Name, ss)
+				}
 			}
 			break
 		}
